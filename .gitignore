@@ -219,4 +219,4 @@ __marimo__/
 
 # Temp files
 input/*.pos
-output/.md
+output/*.md
