@@ -1,10 +1,11 @@
-"""Convert ProcessOn .pos files to Markdown with Mermaid diagrams."""
+"""Convert ProcessOn .pos files to Markdown (Mermaid) and draw.io diagrams."""
 
 import sys
 from pathlib import Path
 from pos_parser import parse_pos
 from mermaid_gen import generate_mermaid
 from md_writer import write_markdown
+from drawio_gen import generate_drawio
 
 
 def main():
@@ -20,10 +21,19 @@ def main():
     for pos_file in pos_files:
         print(f"Processing: {pos_file.name}")
         graph = parse_pos(pos_file)
+
+        # Markdown + Mermaid
         mermaid = generate_mermaid(graph)
-        out_path = output_dir / f"{pos_file.stem}.md"
-        write_markdown(out_path, graph, mermaid)
-        print(f"  -> {out_path.name}")
+        md_path = output_dir / f"{pos_file.stem}.md"
+        write_markdown(md_path, graph, mermaid)
+        print(f"  -> {md_path.name}")
+
+        # draw.io
+        drawio = generate_drawio(graph)
+        drawio_path = output_dir / f"{pos_file.stem}.drawio"
+        with open(drawio_path, "w", encoding="utf-8") as f:
+            f.write(drawio)
+        print(f"  -> {drawio_path.name}")
 
     print("Done.")
 
